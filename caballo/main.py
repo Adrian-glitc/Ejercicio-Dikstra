@@ -1,3 +1,6 @@
+import pygame
+import sys
+
 
 class Caballo:
     def __init__(self, origen, destino):
@@ -39,7 +42,48 @@ class Caballo:
 
         # Suma total de caminos posibles desde cualquier número inicial
         return sum(dp[max_moves][i] for i in range(10))
+
+def draw_board(screen, font, possibilities):
+    screen.fill((255, 255, 255))
+    for i in range(10):
+        x = (i % 3) * 100 + 50
+        y = (i // 3) * 100 + 50
+        if i == 9:  # Ajustar posición del 0
+            x = 150
+            y = 350
+        pygame.draw.circle(screen, (0, 0, 0), (x, y), 40, 2)
+        text = font.render(str(i), True, (0, 0, 0))
+        screen.blit(text, (x - 10, y - 10))
+
+    # Mostrar posibilidades
+    text = font.render(f"Posibilidades: {possibilities}", True, (0, 0, 0))
+    screen.blit(text, (50, 400))
+
 if __name__ == "__main__":
+    pygame.init()
+    screen = pygame.display.set_mode((300, 450))
+    pygame.display.set_caption("Movimientos del Caballo")
+    font = pygame.font.Font(None, 36)
+
     caballo = Caballo((0, 0), (0, 0))
-    for m in [1, 2, 3, 5, 8, 10, 15, 18, 21, 23, 32]:
-        print(f"Movimientos: {m}, Posibilidades válidas: {caballo.knight_moves(m)}")
+    moves = [1, 2, 3, 5, 8, 10, 15, 18, 21, 23, 32]
+    move_index = 0
+
+    clock = pygame.time.Clock()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT:
+                    move_index = (move_index + 1) % len(moves)
+                elif event.key == pygame.K_LEFT:
+                    move_index = (move_index - 1) % len(moves)
+
+        possibilities = caballo.knight_moves(moves[move_index])
+        draw_board(screen, font, possibilities)
+
+        pygame.display.flip()
+        clock.tick(30)
