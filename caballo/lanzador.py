@@ -1,5 +1,4 @@
 
-
 MOVES = {
         0: [4, 6],
         1: [6, 8],
@@ -12,7 +11,7 @@ MOVES = {
         8: [1, 3],
         9: [2, 4],
     }
-    
+
 def knight_moves(self, max_moves):
     dp = [[0] * 10 for _ in range(max_moves + 1)]
 
