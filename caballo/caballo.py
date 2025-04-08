@@ -11,3 +11,5 @@ class Caballo:
 
     def __repr__(self):
         return f"Caballo(origen={self.origen}, destino={self.destino})"
+    
+    
